@@ -13,11 +13,11 @@ public interface BookService {
 
     void updateBook(int id, BookSaveDto dto);
 
-    List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query);
+    List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query, Long offset, Long limit);
 
     void deleteBook(int id);
 
-    List<BookDetailsDto> getAllBook(BookQueryDto query);
+    List<BookDetailsDto> getAllBook(Long offset, Long limit);
 
     void deleteAllBook();
 

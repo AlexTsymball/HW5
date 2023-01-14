@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +62,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query) {
+    public List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query, Long offset, Long limit) {
         Map<String, Object> params = query.getAllParams();
+        paginationAdd(offset,limit,params);
         return bookRepository.searchByNameAndOrGroup(params).stream()
                 .map(this::convertToDetails)
                 .toList();
@@ -75,11 +77,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDetailsDto> getAllBook(BookQueryDto query) {
-        Map<String, Object> params = query.getAllParams();
+    public List<BookDetailsDto> getAllBook(Long offset, Long limit) {
+        Map<String, Object> params = new HashMap<>();
+        paginationAdd(offset,limit, params);
         return bookRepository.getAllBook(params).stream()
                 .map(this::convertToDetails)
                 .toList();
+    }
+
+    private void paginationAdd(Long offset, Long limit, Map<String, Object> params) {
+
+        if (limit != null) {
+            params.put("limit", limit);
+            if (offset != null) {
+                params.put("offset", offset);
+            }
+        }
     }
 
     @Override

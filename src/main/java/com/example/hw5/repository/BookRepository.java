@@ -69,10 +69,11 @@ public class BookRepository {
     private String generatePaginatorSql(StringBuilder result, Map<String, Object> params) {
         if (params.containsKey("limit")) {
             result.append("limit :limit ");
+            if (params.containsKey("offset")) {
+                result.append("offset :offset ");
+            }
         }
-        if (params.containsKey("offset")) {
-            result.append("offset :offset ");
-        }
+
         return String.valueOf(result);
     }
 

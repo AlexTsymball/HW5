@@ -6,14 +6,17 @@ import com.example.hw5.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
+@Validated
 public class BookController {
 
     private final BookService bookService;
@@ -26,12 +29,14 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDetailsDto> getBook(@PathVariable int id) {
-        return  ResponseEntity.status(HttpStatus.OK).body(bookService.getBook(id));
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBook(id));
     }
 
-    @PostMapping
-    public ResponseEntity<List<BookDetailsDto>> getAllBooks(@RequestBody BookQueryDto query) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBook(query));
+    @GetMapping
+    public ResponseEntity<List<BookDetailsDto>> getAllBooks(
+            @RequestParam(required = false) @Min(value = 0, message = "min offset value 0") Long offset,
+            @RequestParam(required = false) @Min(value = 1, message = "min limit value 1") Long limit) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBook(offset, limit));
     }
 
     @PutMapping("/{id}")
@@ -54,8 +59,12 @@ public class BookController {
     }
 
     @PostMapping("_search")
-    public ResponseEntity<List<BookDetailsDto>> search(@RequestBody BookQueryDto query) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.searchByNameAndOrGroup(query));
+    public ResponseEntity<List<BookDetailsDto>> search(@RequestBody BookQueryDto query,
+                                                       @Min(value = 0, message = "min offset value 0")
+                                                       @RequestParam(required = false) Long offset,
+                                                       @Min(value = 1, message = "min limit value 1")
+                                                       @RequestParam(required = false) Long limit) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.searchByNameAndOrGroup(query, offset, limit));
     }
 
 }

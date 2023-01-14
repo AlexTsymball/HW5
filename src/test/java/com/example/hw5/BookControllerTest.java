@@ -233,6 +233,58 @@ public class BookControllerTest {
     }
 
     @Test
+    public void testGetAllBook() throws Exception {
+        BookData bookData = BookData.builder()
+                .name(name)
+                .author(author)
+                .genre(genreData)
+                .build();
+
+        bookRepository.save(bookData);
+
+        BookData bookData2 = BookData.builder()
+                .name(name + "2")
+                .author(author)
+                .genre(genreData)
+                .build();
+
+
+        bookRepository.save(bookData2);
+
+        mvc.perform(get("/api/books"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()",
+                        is(2)));
+
+    }
+
+    @Test
+    public void testGetAllBook_paginator() throws Exception {
+        BookData bookData = BookData.builder()
+                .name(name)
+                .author(author)
+                .genre(genreData)
+                .build();
+
+        bookRepository.save(bookData);
+
+        BookData bookData2 = BookData.builder()
+                .name(name + "2")
+                .author(author)
+                .genre(genreData)
+                .build();
+
+
+        bookRepository.save(bookData2);
+
+        mvc.perform(get("/api/books?offset=1&limit=1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()",
+                        is(1)));
+
+    }
+
+    @Test
     public void testSearch_bookName() throws Exception {
         String body = """
           {
