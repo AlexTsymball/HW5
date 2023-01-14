@@ -50,4 +50,4 @@
 > }
 * http://localhost:8083/api/genres - виводить всі елементи сутності 2 - жанри. 
 
-> Наприклад: GET http://localhost:8083/api/genres
+> GET http://localhost:8083/api/genres
