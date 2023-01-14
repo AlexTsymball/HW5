@@ -6,7 +6,7 @@ USE db;
 DROP TABLE IF EXISTS genre;
 CREATE TABLE genre (
                      id INT AUTO_INCREMENT PRIMARY KEY,
-                     name VARCHAR(255) NOT NULL)
+                     name VARCHAR(255) NOT NULL UNIQUE)
     ENGINE=INNODB;
 
 DROP TABLE IF EXISTS book;
@@ -22,4 +22,5 @@ insert into genre (name) values ('romance');
 insert into genre (name) values ('historical');
 insert into genre (name) values ('detective');
 insert into genre (name) values ('fantasy');
+insert into genre (name) values ('novel');
 insert into genre (name) values ('novel');

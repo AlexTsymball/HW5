@@ -1,8 +1,5 @@
 package com.example.hw5.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +19,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
         HashMap<String, Object> resObj = new HashMap<>();
         String errorMsg = "validation is failed!";
         if (ex.getErrorCount() > 0) {
@@ -40,27 +36,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resObj);
 
     }
-//
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    protected ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
-//        log.warn("IllegalArgumentException thrown: {}", e.getMessage());
-//        return buildResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-//    }
-//
-//    private static ResponseEntity<Object> buildResponse(
-//            HttpStatus httpStatus, String message) {
-//        ErrorResponse response = new ErrorResponse(httpStatus.value(),
-//                httpStatus.getReasonPhrase(), message);
-//        return ResponseEntity.status(httpStatus.value()).body(response);
-//    }
-//
-//    @Getter
-//    @AllArgsConstructor
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    static class ErrorResponse {
-//        private int status;
-//        private String error;
-//        private String message;
-//    }
 }
 

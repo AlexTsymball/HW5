@@ -5,6 +5,7 @@ import com.example.hw5.dto.*;
 import com.example.hw5.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,54 +18,44 @@ public class BookController {
 
     private final BookService bookService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse createBook(@Valid @RequestBody BookSaveDto dto) {
+    @PostMapping("/create")
+    public ResponseEntity<String> createBook(@Valid @RequestBody BookSaveDto dto) {
         int id = bookService.saveBook(dto);
-        return new RestResponse(String.valueOf(id));
+        return ResponseEntity.status(HttpStatus.CREATED).body("The Book with id " + id + " is saved");
     }
 
     @GetMapping("/{id}")
-    public BookDetailsDto getBook(@PathVariable int id) {
-        return bookService.getBook(id);
+    public ResponseEntity<BookDetailsDto> getBook(@PathVariable int id) {
+        return  ResponseEntity.status(HttpStatus.OK).body(bookService.getBook(id));
     }
 
-    @PostMapping("/_all")
-    public List<BookDetailsDto> getAllBook(@RequestBody BookQueryDto query) {
-        return bookService.getAllBook(query);
+    @PostMapping
+    public ResponseEntity<List<BookDetailsDto>> getAllBooks(@RequestBody BookQueryDto query) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBook(query));
     }
 
     @PutMapping("/{id}")
-    public RestResponse updateBook(@PathVariable int id, @RequestBody BookSaveDto dto) {
+    public ResponseEntity<String> updateBook(@PathVariable int id, @RequestBody BookSaveDto dto) {
         bookService.updateBook(id, dto);
-        return new RestResponse("OK");
+        return ResponseEntity.status(HttpStatus.OK).body("The book with id " + id + " is updated.");
     }
 
 
     @DeleteMapping("delete/{id}")
-    public RestResponse deleteBook(@PathVariable int id) {
+    public ResponseEntity<String> deleteBook(@PathVariable int id) {
         bookService.deleteBook(id);
-        return new RestResponse("OK");
+        return ResponseEntity.status(HttpStatus.OK).body("The book with id " + id + " is deleted.");
     }
 
     @DeleteMapping("deleteAll")
-    public RestResponse deleteALlBook() {
+    public ResponseEntity<String> deleteAllBooks() {
         bookService.deleteAllBook();
-        return new RestResponse("OK");
+        return ResponseEntity.status(HttpStatus.OK).body("All books are deleted.");
     }
 
     @PostMapping("_search")
-    public List<BookInfoDto> search(@RequestBody BookQueryDto query) {
-        return bookService.searchByNameAndOrGroup(query);
+    public ResponseEntity<List<BookDetailsDto>> search(@RequestBody BookQueryDto query) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.searchByNameAndOrGroup(query));
     }
 
-    @GetMapping("genre")
-    public List<String> getGenre() {
-        return bookService.getAllGenre();
-    }
-
-    @GetMapping("genre/{id}")
-    public List<BookInfoDto> getGenreBooks(@PathVariable int id) {
-        return bookService.getGenreBooks(id);
-    }
 }

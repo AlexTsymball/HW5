@@ -1,6 +1,5 @@
 package com.example.hw5.dto;
 
-import com.example.hw5.data.GenreData;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,11 +7,11 @@ import lombok.Getter;
 @Builder
 public class BookDetailsDto {
 
-    private int id;
+    private final int id;
 
-    private String name;
+    private final String name;
 
-    private String author;
+    private final String author;
 
-    private GenreData genre;
+    private final GenreDetailsDto genre;
 }

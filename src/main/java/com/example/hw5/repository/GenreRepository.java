@@ -1,55 +1,28 @@
 package com.example.hw5.repository;
 
 import com.example.hw5.data.GenreData;
-import com.example.hw5.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
+@AllArgsConstructor
+@Transactional
 public class GenreRepository {
 
-    @Autowired
-    private DataSource dataSource;
+    private EntityManager entityManager;
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-
-    @PostConstruct
-    public void init() {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public List<GenreData> getAllGenre() {
+        String sql = "SELECT * FROM genre";
+        return entityManager.createNativeQuery(sql, GenreData.class)
+                    .getResultList();
     }
 
+    public GenreData getGenre(int id) {
 
-
-    public GenreData get(int id) {
-        try {
-            return jdbcTemplate.queryForObject("select * from genre where id = :id",
-                    new MapSqlParameterSource().addValue("id", id),
-                    (rs, rowNum) -> toGenreData(rs));
-        }catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("Genre with id %d not found".formatted(id));
-        }
-
-    }
-
-    private GenreData toGenreData(ResultSet rs) throws SQLException {
-        return GenreData.builder()
-                .id(rs.getInt("id"))
-                .name(rs.getString("name"))
-                .build();
-    }
-
-    public List<String> getAllGenre() {
-            return jdbcTemplate.queryForList("select name from genre", new MapSqlParameterSource(),
-                  String.class);
+        return entityManager.find(GenreData.class, id);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.hw5.service;
 
 import com.example.hw5.dto.BookDetailsDto;
-import com.example.hw5.dto.BookInfoDto;
 import com.example.hw5.dto.BookQueryDto;
 import com.example.hw5.dto.BookSaveDto;
 
@@ -14,11 +13,7 @@ public interface BookService {
 
     void updateBook(int id, BookSaveDto dto);
 
-    List<BookInfoDto> searchByNameAndOrGroup(BookQueryDto query);
-
-    List<String> getAllGenre();
-
-    List<BookInfoDto> getGenreBooks(int id);
+    List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query);
 
     void deleteBook(int id);
 

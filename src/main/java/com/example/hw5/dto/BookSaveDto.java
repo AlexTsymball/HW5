@@ -13,12 +13,11 @@ import javax.validation.constraints.NotNull;
 public class BookSaveDto {
 
     @NotBlank(message = "name is required")
-    private String name;
+    private final String name;
 
     @NotBlank(message = "author is required")
-    private String author;
+    private final String author;
 
     @NotNull(message = "genreId is required")
-    private Integer genreId;
-
+    private final int genreId;
 }
