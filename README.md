@@ -38,7 +38,7 @@
 * http://localhost:8083/api/books/deleteAll - видаляє всі книжки. 
 
 > DELETE http://localhost:8083/api/books/deleteAll
-* http://localhost:8083/api/books/_search - шукає книжки по одному або по двох з полів: назва книжки "name", жанр "genre". 
+* http://localhost:8083/api/books/_search - шукає книжки по одному або по двох з полів: назва книжки "name", жанр "genre". Додана пагінація як при виводі всіх книжок /api/books/_search?offset=1&limit=1.
 
 > POST http://localhost:8083/api/books/_search
 > 
