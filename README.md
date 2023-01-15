@@ -2,12 +2,12 @@
 ### Run
 Скрипти для створення бази даних та таблиць знаходяться в src/main/resources/schema.sql та src/test/schema_test.sql. 
 
-Для запуску треба викликати метод Hw5Application та перейти за посиланням http://localhost:8083/. 
+Для запуску треба викликати метод Hw5Application. 
 
 ### Links 
 * http://localhost:8083/api/books - виводить всі книжки. 
 
-> GET /api/books?offset=1&limit=1
+> GET http://localhost:8083/api/books?offset=1&limit=1
 * http://localhost:8083/api/books/create - зберігає книжку(назва книжки "name", автор "author", id жанру "genreId"). 
 
 > POST http://localhost:8083/api/books/create
