@@ -26,13 +26,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int saveBook(BookSaveDto dto) {
-        BookData data = new BookData();
-        updateDataFromDto(data, dto);
-        try {
-            return bookRepository.save(data);
-        } catch (DataIntegrityViolationException e) {
-            throw new NotFoundException("Genre with id %d not found".formatted(dto.getGenreId()));
-        }
+        BookData data = new BookData(dto.getName(), dto.getAuthor());
+        setGenreToBook(data, dto.getGenreId());
+        return bookRepository.save(data);
     }
 
     @Override
@@ -51,20 +47,13 @@ public class BookServiceImpl implements BookService {
         }
         book.setName(dto.getName() == null ? book.getName() : dto.getName());
         book.setAuthor(dto.getAuthor() == null ? book.getAuthor() : dto.getAuthor());
-        int genreId = dto.getGenreId();
-        if (genreId != 0) {
-            GenreData newGenre = genreRepository.getGenre(genreId);
-            if (newGenre == null) {
-                throw new NotFoundException("Genre with id %d not found".formatted(genreId));
-            }
-            book.setGenre(newGenre);
-        }
+        setGenreToBook(book, dto.getGenreId());
     }
 
     @Override
     public List<BookDetailsDto> searchByNameAndOrGroup(BookQueryDto query, Long offset, Long limit) {
         Map<String, Object> params = query.getAllParams();
-        paginationAdd(offset,limit,params);
+        paginationAdd(offset, limit, params);
         return bookRepository.searchByNameAndOrGroup(params).stream()
                 .map(this::convertToDetails)
                 .toList();
@@ -79,11 +68,18 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDetailsDto> getAllBook(Long offset, Long limit) {
         Map<String, Object> params = new HashMap<>();
-        paginationAdd(offset,limit, params);
+        paginationAdd(offset, limit, params);
         return bookRepository.getAllBook(params).stream()
                 .map(this::convertToDetails)
                 .toList();
     }
+
+
+    @Override
+    public void deleteAllBook() {
+        bookRepository.deleteAll();
+    }
+
 
     private void paginationAdd(Long offset, Long limit, Map<String, Object> params) {
 
@@ -95,18 +91,15 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Override
-    public void deleteAllBook() {
-        bookRepository.deleteAll();
-    }
 
-
-    private void updateDataFromDto(BookData data, BookSaveDto dto) {
-        data.setName(dto.getName() == null ? data.getName() : dto.getName());
-        data.setAuthor(dto.getAuthor() == null ? data.getAuthor() : dto.getAuthor());
-        GenreData genre = new GenreData();
-        genre.setId(dto.getGenreId());
-        data.setGenre(genre);
+    private void setGenreToBook(BookData data, int genreId) {
+        if (genreId != 0) {
+            GenreData newGenre = genreRepository.getGenre(genreId);
+            if (newGenre == null) {
+                throw new NotFoundException("Genre with id %d not found".formatted(genreId));
+            }
+            data.setGenre(newGenre);
+        }
     }
 
     private BookDetailsDto convertToDetails(BookData data) {

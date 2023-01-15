@@ -24,7 +24,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private GenreDetailsDto convertToDetails(GenreData data) {
-        if (data == null){
+        if (data == null) {
             return null;
         }
         return GenreDetailsDto.builder()

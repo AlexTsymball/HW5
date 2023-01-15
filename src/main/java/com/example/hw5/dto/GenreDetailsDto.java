@@ -9,8 +9,8 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class GenreDetailsDto {
 
-    private int id;
+    private final int id;
 
-    private String name;
+    private final String name;
 
 }

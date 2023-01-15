@@ -25,4 +25,8 @@ public class BookData {
     @JoinColumn(name = "id_genre")
     private GenreData genre;
 
+    public BookData(String name, String author) {
+        this.name = name;
+        this.author = author;
+    }
 }

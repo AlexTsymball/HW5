@@ -25,14 +25,14 @@ public class BookRepository {
     }
 
     public BookData getBookById(int id) {
-        return  entityManager.find(BookData.class,id);
+        return entityManager.find(BookData.class, id);
     }
 
 
     public List<BookData> getAllBook(Map<String, Object> params) {
         String sql = generatePaginatorSql(new StringBuilder("select * from book  "), params);
         Query query = entityManager.createNativeQuery(sql, BookData.class);
-        for (Map.Entry<String, Object> param: params.entrySet()) {
+        for (Map.Entry<String, Object> param : params.entrySet()) {
             query.setParameter(param.getKey(), param.getValue());
         }
         return query.getResultList();
@@ -41,7 +41,7 @@ public class BookRepository {
     public List<BookData> searchByNameAndOrGroup(Map<String, Object> params) {
         String sql = generateSearchSql(params);
         Query query = entityManager.createQuery(sql, BookData.class);
-        for (Map.Entry<String, Object> param: params.entrySet()) {
+        for (Map.Entry<String, Object> param : params.entrySet()) {
             query.setParameter(param.getKey(), param.getValue());
         }
         return query.getResultList();
@@ -54,7 +54,7 @@ public class BookRepository {
             where.append("b.name = :name ");
         }
         if (params.containsKey("genre")) {
-            if(!where.isEmpty()) {
+            if (!where.isEmpty()) {
                 where.append("and ");
             }
             where.append("b.genre.name = :genre");
@@ -80,7 +80,7 @@ public class BookRepository {
     public void delete(int id) {
         String sql = "delete from book where id = :id";
         int deleted = entityManager.createNativeQuery(sql)
-                .setParameter("id",id)
+                .setParameter("id", id)
                 .executeUpdate();
         if (deleted < 1) {
             throw new NotFoundException("Book with id %d not found".formatted(id));

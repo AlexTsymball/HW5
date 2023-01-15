@@ -35,7 +35,7 @@ public class BookControllerTest {
 
     private static String name = "book1";
     private static String author = "Author";
-    private static GenreData genreData = new GenreData(2,"historical");
+    private static GenreData genreData = new GenreData(2, "historical");
 
     @Autowired
     private MockMvc mvc;
@@ -54,7 +54,7 @@ public class BookControllerTest {
         bookService.deleteAllBook();
     }
 
-    private <T>T parseResponse(MvcResult mvcResult, Class<T> c) {
+    private <T> T parseResponse(MvcResult mvcResult, Class<T> c) {
         try {
             return objectMapper.readValue(mvcResult.getResponse().getContentAsString(), c);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
@@ -67,12 +67,12 @@ public class BookControllerTest {
     public void testCreateBook() throws Exception {
         int genreId = 2;
         String body = """
-          {
-              "name": "%s",
-              "author": "%s",
-              "genreId": %d
-          }
-        """.formatted(name, author, genreId);
+                  {
+                      "name": "%s",
+                      "author": "%s",
+                      "genreId": %d
+                  }
+                """.formatted(name, author, genreId);
         mvc.perform(post("/api/books/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
@@ -105,7 +105,7 @@ public class BookControllerTest {
                 .build();
 
         int bookId = bookRepository.save(bookData);
-        MvcResult mvcResult = mvc.perform(get("/api/books/{id}" , bookId))
+        MvcResult mvcResult = mvc.perform(get("/api/books/{id}", bookId))
                 .andReturn();
 
         BookDetailsDto response = parseResponse(mvcResult, BookDetailsDto.class);
@@ -127,22 +127,22 @@ public class BookControllerTest {
 
 
         int bookId = bookRepository.save(bookData);
-        mvc.perform(get("/api/books/{id}" , bookId+1))
+        mvc.perform(get("/api/books/{id}", bookId + 1))
                 .andExpect(status().isNotFound())
                 .andExpect(result ->
-                        assertEquals("Book with id %d not found".formatted(bookId+1), result.getResolvedException().getMessage()));
+                        assertEquals("Book with id %d not found".formatted(bookId + 1), result.getResolvedException().getMessage()));
     }
 
     @Test
     public void testUpdateBook() throws Exception {
         String nameNew = "bookAfterChange";
         String body = """
-          {
-              "name": "%s",
-              "author": "%s",
-              "genreId": %d
-          }
-        """.formatted(nameNew, author, genreData.getId());
+                  {
+                      "name": "%s",
+                      "author": "%s",
+                      "genreId": %d
+                  }
+                """.formatted(nameNew, author, genreData.getId());
 
         BookData bookData = BookData.builder()
                 .name(name)
@@ -175,12 +175,12 @@ public class BookControllerTest {
 
         String nameNew = "bookAfterChange";
         String body = """
-          {
-              "name": "%s",
-              "author": "%s",
-              "genreId": %d
-          }
-        """.formatted(nameNew, author, genreData.getId());
+                  {
+                      "name": "%s",
+                      "author": "%s",
+                      "genreId": %d
+                  }
+                """.formatted(nameNew, author, genreData.getId());
 
         BookData bookData = BookData.builder()
                 .name(name)
@@ -190,23 +190,23 @@ public class BookControllerTest {
 
         int bookId = bookRepository.save(bookData);
 
-      mvc.perform(put("/api/books/{id}", bookId+1)
+        mvc.perform(put("/api/books/{id}", bookId + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
         )
                 .andExpect(status().isNotFound())
                 .andExpect(result ->
-                        assertEquals("Book with id %d not found".formatted(bookId+1), result.getResolvedException().getMessage()));
+                        assertEquals("Book with id %d not found".formatted(bookId + 1), result.getResolvedException().getMessage()));
     }
 
     @Test
     public void testUpdateBook_withNotAllValues() throws Exception {
         String nameNew = "bookNew";
         String body = """
-          {
-              "name": "%s"
-          }
-        """.formatted(nameNew);
+                  {
+                      "name": "%s"
+                  }
+                """.formatted(nameNew);
         BookData bookData = BookData.builder()
                 .name(name)
                 .author(author)
@@ -218,8 +218,8 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
         )
-              .andExpect(status().isOk())
-              .andReturn();
+                .andExpect(status().isOk())
+                .andReturn();
 
         String result = mvcResult.getResponse().getContentAsString();
         assertThat(result).isEqualTo("The book with id " + bookId + " is updated.");
@@ -287,10 +287,10 @@ public class BookControllerTest {
     @Test
     public void testSearch_bookName() throws Exception {
         String body = """
-          {
-              "name": "%s"
-          }
-        """.formatted(name);
+                  {
+                      "name": "%s"
+                  }
+                """.formatted(name);
         BookData bookData = BookData.builder()
                 .name(name)
                 .author(author)
@@ -312,7 +312,7 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
         )
-              .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()",
                         is(1)))
                 .andExpect(jsonPath("$[0].name",
@@ -325,10 +325,10 @@ public class BookControllerTest {
     @Test
     public void testSearch_idGenre() throws Exception {
         String body = """
-          {
-              "genreId": "%d"
-          }
-        """.formatted(genreData.getId());
+                  {
+                      "genreId": "%d"
+                  }
+                """.formatted(genreData.getId());
 
         BookData bookData = BookData.builder()
                 .name(name)
@@ -339,7 +339,7 @@ public class BookControllerTest {
         bookRepository.save(bookData);
 
         BookData bookData2 = BookData.builder()
-                .name(name+"2")
+                .name(name + "2")
                 .author(author)
                 .genre(genreData)
                 .build();
@@ -351,7 +351,7 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
         )
-              .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()",
                         is(2)))
                 .andExpect(jsonPath("$[0].genre.name",
@@ -372,7 +372,7 @@ public class BookControllerTest {
         bookRepository.save(bookData);
 
         BookData bookData2 = BookData.builder()
-                .name(name+"2")
+                .name(name + "2")
                 .author(author)
                 .genre(genreData)
                 .build();
@@ -383,7 +383,7 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")
         )
-              .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()",
                         is(2)))
                 .andExpect(jsonPath("$[0].genre.name",
@@ -394,10 +394,10 @@ public class BookControllerTest {
     @Test
     public void testSearch_notExist() throws Exception {
         String body = """
-          {
-              "genre": "%s"
-          }
-        """.formatted("not exist");
+                  {
+                      "genre": "%s"
+                  }
+                """.formatted("not exist");
 
         BookData bookData = BookData.builder()
                 .name(name)
@@ -408,7 +408,7 @@ public class BookControllerTest {
         bookRepository.save(bookData);
 
         BookData bookData2 = BookData.builder()
-                .name(name+"2")
+                .name(name + "2")
                 .author(author)
                 .genre(genreData)
                 .build();
@@ -419,7 +419,7 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
         )
-              .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()",
                         is(0)));
 
@@ -428,7 +428,7 @@ public class BookControllerTest {
     @Test
     public void testGetAllGenre() throws Exception {
         mvc.perform(get("/api/genres"))
-              .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()",
                         is(5)));
 
@@ -444,7 +444,7 @@ public class BookControllerTest {
                 .build();
 
         int bookId = bookRepository.save(bookData);
-        MvcResult mvcResult = mvc.perform(delete("/api/books/delete/{id}" , bookId))
+        MvcResult mvcResult = mvc.perform(delete("/api/books/delete/{id}", bookId))
                 .andReturn();
 
 
@@ -463,10 +463,10 @@ public class BookControllerTest {
                 .build();
 
         int bookId = bookRepository.save(bookData);
-        mvc.perform(delete("/api/books/delete/{id}" , bookId+1))
+        mvc.perform(delete("/api/books/delete/{id}", bookId + 1))
                 .andExpect(status().isNotFound())
                 .andExpect(result ->
-                        assertEquals("Book with id %d not found".formatted(bookId+1), result.getResolvedException().getMessage()));
+                        assertEquals("Book with id %d not found".formatted(bookId + 1), result.getResolvedException().getMessage()));
     }
 
     @Test
@@ -478,7 +478,7 @@ public class BookControllerTest {
                 .build();
 
         bookRepository.save(bookData);
-        MvcResult mvcResult = mvc.perform(delete("/api/books/deleteAll" ))
+        MvcResult mvcResult = mvc.perform(delete("/api/books/deleteAll"))
                 .andReturn();
 
 

@@ -18,11 +18,10 @@ public class GenreRepository {
     public List<GenreData> getAllGenre() {
         String sql = "SELECT * FROM genre";
         return entityManager.createNativeQuery(sql, GenreData.class)
-                    .getResultList();
+                .getResultList();
     }
 
     public GenreData getGenre(int id) {
-
         return entityManager.find(GenreData.class, id);
     }
 }

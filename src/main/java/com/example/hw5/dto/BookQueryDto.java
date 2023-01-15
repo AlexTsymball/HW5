@@ -14,7 +14,7 @@ public class BookQueryDto {
 
     private String genre;
 
-    public Map<String, Object> getAllParams(){
+    public Map<String, Object> getAllParams() {
         Map<String, Object> params = new HashMap<>();
         if (name != null && !name.isBlank()) {
             params.put("name", name);

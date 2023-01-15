@@ -17,12 +17,9 @@ public class GenreController {
 
     private final GenreService genreService;
 
-
-
     @GetMapping()
-    public ResponseEntity<List<GenreDetailsDto>> getGenres(){
+    public ResponseEntity<List<GenreDetailsDto>> getGenres() {
         return ResponseEntity.status(HttpStatus.OK).body(genreService.getAllGenre());
     }
-
 }
 

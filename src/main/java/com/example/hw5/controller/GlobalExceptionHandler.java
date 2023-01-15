@@ -30,7 +30,6 @@ public class GlobalExceptionHandler {
         resObj.put("status", HttpStatus.BAD_REQUEST);
         resObj.put("message", errorMsg.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resObj);
-
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -45,9 +44,7 @@ public class GlobalExceptionHandler {
         }
         resObj.put("status", HttpStatus.BAD_REQUEST);
         resObj.put("message", errorMsg.toString());
-        System.out.println(errorMsg);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resObj);
-
     }
 }
 
