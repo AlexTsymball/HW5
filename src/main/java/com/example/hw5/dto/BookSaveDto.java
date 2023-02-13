@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -18,6 +20,6 @@ public class BookSaveDto {
     @NotBlank(message = "author is required")
     private final String author;
 
-    @NotNull(message = "genreId is required")
+    @Min(value = 1, message = "genreId is required")
     private final int genreId;
 }

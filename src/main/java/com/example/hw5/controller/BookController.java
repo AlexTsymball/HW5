@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 @Validated
+@CrossOrigin
 public class BookController {
 
     private final BookService bookService;
